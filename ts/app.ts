@@ -1,15 +1,15 @@
-import { DefaultIcon } from "$ts/images/apps";
+import { TextEditorIcon } from "$ts/images/apps";
 import { App } from "$types/app";
 import AppSvelte from "../App.svelte";
 import { Runtime } from "./runtime";
 
 export const TextEditor: App = {
   metadata: {
-    name: "Text Editor",
+    name: "Writer",
     description: "Read and edit plain-text files",
     author: "ArcOS Team",
     version: "2.0.0",
-    icon: DefaultIcon,
+    icon: TextEditorIcon,
     appGroup: "utilities",
   },
   runtime: Runtime,
@@ -31,5 +31,4 @@ export const TextEditor: App = {
     maximize: true,
     close: true,
   },
-
 };
