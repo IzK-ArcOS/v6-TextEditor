@@ -58,6 +58,12 @@ export const TextEditorAltMenu: (runtime: Runtime) => ContextMenuItem[] = (runti
         caption: "Word Wrap",
         action: () => { runtime.wordWrap.set(!runtime.wordWrap.get()) },
         isActive: () => runtime.wordWrap.get()
+      },
+      SEP_ITEM,
+      {
+        caption: "Error Checking",
+        action: () => { runtime.spellcheck.set(!runtime.spellcheck.get()) },
+        isActive: () => runtime.spellcheck.get()
       }
     ]
   }

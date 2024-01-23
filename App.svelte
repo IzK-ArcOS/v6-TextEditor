@@ -4,7 +4,7 @@
 
   export let runtime: Runtime;
 
-  const { File, wordWrap, monospace, buffer } = runtime;
+  const { File, wordWrap, monospace, spellcheck, buffer } = runtime;
 
   let contents = "";
 
@@ -25,5 +25,6 @@
   on:keydown={update}
   class:nowrap={!$wordWrap}
   class:monospace={$monospace}
+  spellcheck={$spellcheck}
   wrap="soft"
 />
