@@ -31,4 +31,5 @@ export const TextEditor: App = {
     maximize: true,
     close: true,
   },
+  glass: true
 };

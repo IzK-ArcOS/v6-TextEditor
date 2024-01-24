@@ -1,6 +1,7 @@
 #TextEditor > div.body {
   padding: 0;
   display: flex;
+  border-top: var(--win-border);
 }
 
 #TextEditor > div.body textarea {
