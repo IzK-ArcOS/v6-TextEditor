@@ -4,25 +4,11 @@
 
   export let runtime: Runtime;
 
-  const { File, wordWrap, monospace, spellcheck, buffer } = runtime;
-
-  let contents = "";
-
-  File.subscribe((v) => {
-    if (!v) return;
-
-    contents = $buffer;
-  });
-
-  function update() {
-    buffer.set(contents);
-  }
+  const { wordWrap, monospace, spellcheck, buffer } = runtime;
 </script>
 
 <textarea
-  bind:value={contents}
-  on:input={update}
-  on:keydown={update}
+  bind:value={$buffer}
   class:nowrap={!$wordWrap}
   class:monospace={$monospace}
   spellcheck={$spellcheck}

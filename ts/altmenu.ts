@@ -27,14 +27,7 @@ export const TextEditorAltMenu: (runtime: Runtime) => ContextMenuItem[] = (runti
       {
         caption: "Open file location",
         action: () => {
-          const path = runtime.path.get();
-
-          if (!path) return
-
-          const split = path.split("/");
-          const filename = split[split.length - 1];
-
-          spawnApp("FileManager", 0, [path.replace(`/${filename}`, ""), path])
+          runtime.openFileLocation();
         },
         disabled: () => !runtime.path.get()
       },

@@ -1,4 +1,4 @@
-import { getAppById, spawnOverlay } from "$ts/apps";
+import { getAppById, spawnApp, spawnOverlay } from "$ts/apps";
 import { AppRuntime } from "$ts/apps/runtime";
 import { PersonalizationIcon, SaveIcon } from "$ts/images/general";
 import { Process } from "$ts/process";
@@ -8,6 +8,7 @@ import { GetSaveFilePath } from "$ts/stores/apps/file";
 import { Store } from "$ts/writable";
 import type { App, AppMutator } from "$types/app";
 import { ArcFile } from "$types/fs";
+import { TextEditorAccelerators } from "./accelerators";
 import { TextEditorAltMenu } from "./altmenu";
 
 export class Runtime extends AppRuntime {
@@ -24,17 +25,7 @@ export class Runtime extends AppRuntime {
     this.openedFile.subscribe(async (v) => {
       if (!v) return;
 
-      this.path.set(v);
-
-      const file = await readFile(v);
-
-      if (!file) return;
-
-      this.buffer.set(await file.data.text())
-
-      this.File.set(file);
-
-      this.setWindowTitle(file.name, true)
+      await this.readFile(v);
     })
 
     if (process.args.length && typeof process.args[0] === "string") {
@@ -42,9 +33,26 @@ export class Runtime extends AppRuntime {
     }
 
     this.loadAltMenu(...TextEditorAltMenu(this));
+    this.process.accelerator.store.push(...TextEditorAccelerators(this))
+  }
+
+  async readFile(v: string) {
+    this.path.set(v);
+
+    const file = await readFile(v);
+
+    if (!file) return;
+
+    this.buffer.set(await file.data.text())
+
+    this.File.set(file);
+
+    this.setWindowTitle(file.name, true)
   }
 
   public async save(content: string) {
+    if (!content) return;
+
     const path = this.path.get();
     const file = this.File.get();
     const written = await writeFile(path, textToBlob(content, file ? file.mime : null));
@@ -53,8 +61,10 @@ export class Runtime extends AppRuntime {
   }
 
   public async saveAs(content: string) {
+    if (!content) return;
+
     const path = await GetSaveFilePath(this.pid, {
-      title: "Find a save",
+      title: "Select location to save file",
       icon: SaveIcon,
     });
 
@@ -71,9 +81,20 @@ export class Runtime extends AppRuntime {
   public openFile() {
     spawnOverlay(getAppById("LoadSaveDialog"), this.pid, [
       {
-        title: "Load File",
+        title: "Select any file to open",
         icon: PersonalizationIcon,
       },
     ]);
+  }
+
+  public openFileLocation() {
+    const path = this.path.get();
+
+    if (!path) return
+
+    const split = path.split("/");
+    const filename = split[split.length - 1];
+
+    spawnApp("FileManager", 0, [path.replace(`/${filename}`, ""), path])
   }
 }
