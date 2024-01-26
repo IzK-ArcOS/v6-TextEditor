@@ -1,9 +1,13 @@
 import { getAppById, spawnApp, spawnOverlay } from "$ts/apps";
 import { AppRuntime } from "$ts/apps/runtime";
+import { TextEditorIcon } from "$ts/images/apps";
 import { PersonalizationIcon, SaveIcon } from "$ts/images/general";
 import { Process } from "$ts/process";
 import { textToBlob } from "$ts/server/fs/convert";
+import { getParentDirectory } from "$ts/server/fs/dir";
 import { readFile, writeFile } from "$ts/server/fs/file";
+import { FileProgress } from "$ts/server/fs/progress";
+import { pathToFriendlyPath } from "$ts/server/fs/util";
 import { GetSaveFilePath } from "$ts/stores/apps/file";
 import { Store } from "$ts/writable";
 import type { App, AppMutator } from "$types/app";
@@ -39,15 +43,21 @@ export class Runtime extends AppRuntime {
   async readFile(v: string) {
     this.path.set(v);
 
+    const { setDone, setErrors } = await this.LoadProgress(v);
+
     const file = await readFile(v);
 
-    if (!file) return;
+    if (!file) {
+      setErrors(1);
+      setDone(1);
+      return
+    }
 
     this.buffer.set(await file.data.text())
-
     this.File.set(file);
-
     this.setWindowTitle(file.name, true)
+
+    setDone(1);
   }
 
   public async save(content: string) {
@@ -83,6 +93,7 @@ export class Runtime extends AppRuntime {
       {
         title: "Select any file to open",
         icon: PersonalizationIcon,
+        startDir: getParentDirectory(this.path.get() || "./")
       },
     ]);
   }
@@ -96,5 +107,19 @@ export class Runtime extends AppRuntime {
     const filename = split[split.length - 1];
 
     spawnApp("FileManager", 0, [path.replace(`/${filename}`, ""), path])
+  }
+
+  public async LoadProgress(v: string = this.path.get()) {
+    return await FileProgress({
+      caption: "Reading File",
+      subtitle: pathToFriendlyPath(v),
+      icon: TextEditorIcon,
+      max: 1,
+      done: 0,
+      type: "quantity",
+      waiting: false,
+      working: true,
+      errors: 0
+    }, this.pid)
   }
 }
