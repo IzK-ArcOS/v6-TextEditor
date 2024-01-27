@@ -7,7 +7,7 @@ import { textToBlob } from "$ts/server/fs/convert";
 import { getParentDirectory } from "$ts/server/fs/dir";
 import { readFile, writeFile } from "$ts/server/fs/file";
 import { FileProgress } from "$ts/server/fs/progress";
-import { pathToFriendlyPath } from "$ts/server/fs/util";
+import { pathToFriendlyName, pathToFriendlyPath } from "$ts/server/fs/util";
 import { GetSaveFilePath } from "$ts/stores/apps/file";
 import { Store } from "$ts/writable";
 import type { App, AppMutator } from "$types/app";
@@ -65,7 +65,12 @@ export class Runtime extends AppRuntime {
 
     const path = this.path.get();
     const file = this.File.get();
+
+    const { setDone } = await this.SaveProgress(path)
+
     const written = await writeFile(path, textToBlob(content, file ? file.mime : null));
+
+    setDone(1);
 
     return !!written;
   }
@@ -112,8 +117,24 @@ export class Runtime extends AppRuntime {
   public async LoadProgress(v: string = this.path.get()) {
     return await FileProgress({
       caption: "Reading File",
-      subtitle: pathToFriendlyPath(v),
+      subtitle: `Home/${pathToFriendlyPath(v)}`,
       icon: TextEditorIcon,
+      max: 1,
+      done: 0,
+      type: "quantity",
+      waiting: false,
+      working: true,
+      errors: 0
+    }, this.pid)
+  }
+
+  public async SaveProgress(v: string = this.path.get()) {
+    const filename = pathToFriendlyName(v);
+
+    return await FileProgress({
+      caption: `Saving ${filename}`,
+      subtitle: `Home/${pathToFriendlyPath(v)}`,
+      icon: SaveIcon,
       max: 1,
       done: 0,
       type: "quantity",
