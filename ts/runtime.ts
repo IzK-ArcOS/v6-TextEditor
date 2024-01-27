@@ -1,11 +1,12 @@
 import { getAppById, spawnApp, spawnOverlay } from "$ts/apps";
 import { AppRuntime } from "$ts/apps/runtime";
 import { TextEditorIcon } from "$ts/images/apps";
-import { PersonalizationIcon, SaveIcon } from "$ts/images/general";
+import { SaveIcon } from "$ts/images/general";
 import { Process } from "$ts/process";
 import { textToBlob } from "$ts/server/fs/convert";
 import { getParentDirectory } from "$ts/server/fs/dir";
 import { readFile, writeFile } from "$ts/server/fs/file";
+import { getMimeIcon } from "$ts/server/fs/mime";
 import { FileProgress } from "$ts/server/fs/progress";
 import { pathToFriendlyName, pathToFriendlyPath } from "$ts/server/fs/util";
 import { GetSaveFilePath } from "$ts/stores/apps/file";
@@ -55,7 +56,8 @@ export class Runtime extends AppRuntime {
 
     this.buffer.set(await file.data.text())
     this.File.set(file);
-    this.setWindowTitle(file.name, true)
+    this.setWindowTitle(file.name);
+    this.setWindowIcon(getMimeIcon(file.name))
 
     setDone(1);
   }
@@ -81,6 +83,7 @@ export class Runtime extends AppRuntime {
     const path = await GetSaveFilePath(this.pid, {
       title: "Select location to save file",
       icon: SaveIcon,
+      startDir: getParentDirectory(this.path.get() || "./")
     });
 
     if (!path) return;
@@ -97,7 +100,7 @@ export class Runtime extends AppRuntime {
     spawnOverlay(getAppById("LoadSaveDialog"), this.pid, [
       {
         title: "Select any file to open",
-        icon: PersonalizationIcon,
+        icon: TextEditorIcon,
         startDir: getParentDirectory(this.path.get() || "./")
       },
     ]);
