@@ -1,5 +1,4 @@
 #TextEditor > div.body {
-  padding: 0;
   display: flex;
   border-top: var(--win-border);
 }
@@ -25,4 +24,13 @@
   white-space: pre;
   word-wrap: normal;
   overflow-x: scroll;
+}
+
+#TextEditor div.body {
+  padding: 0;
+}
+
+#TextEditor #SearchReplace div.body {
+  height: 100%;
+  overflow: hidden;
 }

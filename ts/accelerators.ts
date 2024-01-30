@@ -22,7 +22,7 @@ export const TextEditorAccelerators: (runtime: Runtime) => AppKeyCombinations = 
       key: "s",
       alt: true,
       action() {
-        runtime.save(runtime.buffer.get())
+        runtime.save()
       }
     },
     {
@@ -30,7 +30,7 @@ export const TextEditorAccelerators: (runtime: Runtime) => AppKeyCombinations = 
       alt: true,
       shift: true,
       action() {
-        runtime.saveAs(runtime.buffer.get())
+        runtime.saveAs()
       }
     },
   ]

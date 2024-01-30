@@ -15,6 +15,8 @@ import type { App, AppMutator } from "$types/app";
 import { ArcFile } from "$types/fs";
 import { TextEditorAccelerators } from "./accelerators";
 import { TextEditorAltMenu } from "./altmenu";
+import { SearchReplace } from "./overlay/SearchReplace";
+import { TextEditorDispatchers } from "./store";
 
 export class Runtime extends AppRuntime {
   public File = Store<ArcFile>();
@@ -23,6 +25,7 @@ export class Runtime extends AppRuntime {
   public wordWrap = Store<boolean>(true);
   public monospace = Store<boolean>(true);
   public spellcheck = Store<boolean>(false);
+  public input: HTMLTextAreaElement;
 
   constructor(app: App, mutator: AppMutator, process: Process) {
     super(app, mutator, process);
@@ -39,6 +42,13 @@ export class Runtime extends AppRuntime {
 
     this.loadAltMenu(...TextEditorAltMenu(this));
     this.process.accelerator.store.push(...TextEditorAccelerators(this))
+    this.assignDispatchers();
+  }
+
+  public setTextarea(input: HTMLTextAreaElement) {
+    if (!input) return;
+
+    this.input = input;
   }
 
   async readFile(v: string) {
@@ -63,8 +73,8 @@ export class Runtime extends AppRuntime {
     setDone(1);
   }
 
-  public async save(content: string) {
-    if (!content) return;
+  public async save() {
+    const content = this.buffer.get()
 
     const path = this.path.get();
     const file = this.File.get();
@@ -78,9 +88,7 @@ export class Runtime extends AppRuntime {
     return !!written;
   }
 
-  public async saveAs(content: string) {
-    if (!content) return;
-
+  public async saveAs() {
     const path = await GetSaveFilePath(this.pid, {
       title: "Select location to save file",
       icon: SaveIcon,
@@ -90,9 +98,8 @@ export class Runtime extends AppRuntime {
     if (!path) return;
 
     this.path.set(path);
-    this.buffer.set(content);
 
-    await this.save(content);
+    await this.save();
 
     this.openedFile.set(path)
   }
@@ -116,6 +123,39 @@ export class Runtime extends AppRuntime {
     const filename = split[split.length - 1];
 
     spawnApp("FileManager", 0, [path.replace(`/${filename}`, ""), path])
+  }
+
+  public selectAll() {
+    if (!this.input) return;
+
+    this.input.select();
+  }
+
+  public replaceOnce(text: string, replacer: string) {
+    const buffer = this.buffer.get();
+
+    this.buffer.set(buffer.replace(text, replacer))
+  }
+
+  public replaceAll(text: string, replacer: string) {
+    const buffer = this.buffer.get();
+
+    this.buffer.set(buffer.replaceAll(text, replacer))
+  }
+
+  private assignDispatchers() {
+    const dispatchers = TextEditorDispatchers(this);
+
+    for (const event in dispatchers) {
+      const dispatcher = dispatchers[event];
+
+      this.process.handler.dispatch.subscribe(this.pid, event, dispatcher);
+    }
+  }
+
+
+  SearchReplaceDialog(args: any[] = []) {
+    spawnOverlay(SearchReplace, this.process.pid, args);
   }
 
   public async LoadProgress(v: string = this.path.get()) {
