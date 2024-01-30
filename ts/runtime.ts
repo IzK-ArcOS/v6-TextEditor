@@ -51,7 +51,8 @@ export class Runtime extends AppRuntime {
     if (!file) {
       setErrors(1);
       setDone(1);
-      return
+
+      return;
     }
 
     this.buffer.set(await file.data.text())

@@ -17,10 +17,11 @@ export const TextEditorAltMenu: (runtime: Runtime) => ContextMenuItem[] = (runti
         action: async () => {
           await runtime.save(runtime.buffer.get());
         },
-        disabled: () => !runtime.path.get(),
+        disabled: () => !runtime.path.get() || !runtime.buffer.get(),
       },
       {
         caption: "Save As...",
+        disabled: () => !runtime.buffer.get(),
         action: async () => await runtime.saveAs(runtime.buffer.get()),
       },
       SEP_ITEM,
