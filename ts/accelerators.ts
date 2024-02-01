@@ -33,5 +33,11 @@ export const TextEditorAccelerators: (runtime: Runtime) => AppKeyCombinations = 
         runtime.saveAs()
       }
     },
+    {
+      key: "f3",
+      action() {
+        runtime.SearchReplaceDialog();
+      }
+    }
   ]
 }

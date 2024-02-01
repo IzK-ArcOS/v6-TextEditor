@@ -11,14 +11,17 @@ export function EditMenu(runtime: Runtime): ContextMenuItem {
         icon: "select_all",
         action() {
           runtime.selectAll();
-        }
+        },
+        accelerator: "Ctrl+A",
       },
       SEP_ITEM,
       {
         caption: "Search & Replace...",
+        icon: "find_replace",
         action() {
           runtime.SearchReplaceDialog();
-        }
+        },
+        accelerator: "F3"
       }
     ]
   }
