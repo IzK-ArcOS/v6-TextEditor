@@ -13,7 +13,7 @@ export function OpenMenu(runtime: Runtime): ContextMenuItem {
     subItems: [
       {
         caption: `Open file in...`,
-        disabled: () => !runtime.path.get(),
+        disabled: () => !runtime.path.get() || runtime.isClient.get(),
         image: AppsIcon,
         async action() {
           const path = runtime.path.get();
@@ -24,7 +24,7 @@ export function OpenMenu(runtime: Runtime): ContextMenuItem {
       },
       {
         caption: "Open as Markdown",
-        disabled: () => !runtime.path.get() || !runtime.path.get().endsWith(".md"),
+        disabled: () => !runtime.path.get() || !runtime.path.get().endsWith(".md") || runtime.isClient.get(),
         image: MarkdownMimeIcon,
         async action() {
           const path = runtime.path.get();

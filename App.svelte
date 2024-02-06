@@ -5,7 +5,7 @@
 
   export let runtime: Runtime;
 
-  const { wordWrap, monospace, spellcheck, buffer } = runtime;
+  const { wordWrap, monospace, spellcheck, buffer, isClient } = runtime;
 
   let input: HTMLTextAreaElement;
 
@@ -20,5 +20,6 @@
   class:nowrap={!$wordWrap}
   class:monospace={$monospace}
   spellcheck={$spellcheck}
+  readonly={$isClient}
   wrap="soft"
 />

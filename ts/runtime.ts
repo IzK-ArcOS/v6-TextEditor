@@ -25,6 +25,7 @@ export class Runtime extends AppRuntime {
   public wordWrap = Store<boolean>(true);
   public monospace = Store<boolean>(true);
   public spellcheck = Store<boolean>(false);
+  public isClient = Store<boolean>(false);
   public input: HTMLTextAreaElement;
 
   constructor(app: App, mutator: AppMutator, process: Process) {
@@ -65,17 +66,19 @@ export class Runtime extends AppRuntime {
       return;
     }
 
+    this.isClient.set(v.startsWith("@client"));
     this.buffer.set(await file.data.text())
     this.File.set(file);
-    this.setWindowTitle(file.name);
+    this.setWindowTitle(file.name + (this.isClient.get() ? " (Read-only)" : ""));
     this.setWindowIcon(getMimeIcon(file.name))
 
     setDone(1);
   }
 
   public async save() {
-    const content = this.buffer.get()
+    if (this.isClient.get()) return;
 
+    const content = this.buffer.get()
     const path = this.path.get();
     const file = this.File.get();
 
@@ -117,7 +120,7 @@ export class Runtime extends AppRuntime {
   public openFileLocation() {
     const path = this.path.get();
 
-    if (!path) return
+    if (!path || this.isClient.get()) return
 
     const split = path.split("/");
     const filename = split[split.length - 1];
@@ -155,6 +158,8 @@ export class Runtime extends AppRuntime {
 
 
   SearchReplaceDialog(args: any[] = []) {
+    if (this.isClient.get()) return;
+
     spawnOverlay(SearchReplace, this.process.pid, args);
   }
 

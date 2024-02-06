@@ -20,7 +20,7 @@ export function FileMenu(runtime: Runtime): ContextMenuItem {
         action: async () => {
           await runtime.save();
         },
-        disabled: () => !runtime.path.get() || !runtime.buffer.get(),
+        disabled: () => !runtime.path.get() || !runtime.buffer.get() || runtime.isClient.get(),
         accelerator: "Alt+S"
       },
       {
@@ -36,7 +36,7 @@ export function FileMenu(runtime: Runtime): ContextMenuItem {
         action: () => {
           runtime.openFileLocation();
         },
-        disabled: () => !runtime.path.get(),
+        disabled: () => !runtime.path.get() || runtime.isClient.get(),
         accelerator: "Alt+Shift+O"
       },
       SEP_ITEM,
