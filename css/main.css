@@ -1,9 +1,39 @@
 #TextEditor > div.body {
   display: flex;
+  flex-direction: column;
   border-top: var(--win-border);
 }
 
-#TextEditor > div.body textarea {
+#TextEditor > div.body div.splitpanes {
+  height: 100%;
+  flex-grow: 1;
+}
+
+#TextEditor > div.body div.statusbar {
+  background-color: var(--win-bg);
+  height: 25px;
+  border-top: var(--win-border);
+  padding: 0 7px;
+  line-height: 24px;
+  min-height: 25px;
+}
+
+#TextEditor > div.body div.statusbar div.segment {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+#TextEditor > div.body div.statusbar div.segment + div.segment {
+  border-left: var(--win-border-light);
+}
+
+#TextEditor > div.body div.statusbar div.segment img {
+  height: 16px;
+}
+
+#TextEditor > div.body textarea,
+#TextEditor > div.body div.markdownrenderer {
   width: 100%;
   height: 100%;
   resize: none;
@@ -14,6 +44,7 @@
   margin: 0;
   flex-grow: 1;
   font-size: var(--font-size);
+  overflow: scroll;
 }
 
 #TextEditor > div.body textarea.monospace {

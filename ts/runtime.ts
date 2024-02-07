@@ -10,6 +10,7 @@ import { getMimeIcon } from "$ts/server/fs/mime";
 import { FileProgress } from "$ts/server/fs/progress";
 import { pathToFriendlyName, pathToFriendlyPath } from "$ts/server/fs/util";
 import { GetSaveFilePath } from "$ts/stores/apps/file";
+import { sleep } from "$ts/util";
 import { Store } from "$ts/writable";
 import type { App, AppMutator } from "$types/app";
 import { ArcFile } from "$types/fs";
@@ -26,6 +27,8 @@ export class Runtime extends AppRuntime {
   public monospace = Store<boolean>(true);
   public spellcheck = Store<boolean>(false);
   public isClient = Store<boolean>(false);
+  public markdownPreview = Store<boolean>(false);
+  public statusBar = Store<boolean>(true);
   public input: HTMLTextAreaElement;
 
   constructor(app: App, mutator: AppMutator, process: Process) {
@@ -66,8 +69,13 @@ export class Runtime extends AppRuntime {
       return;
     }
 
+    const content = await file.data.text();
+
+    this.buffer.set(content);
+    await sleep(0);
+    this.buffer.set(this.buffer.get());
+
     this.isClient.set(v.startsWith("@client"));
-    this.buffer.set(await file.data.text())
     this.File.set(file);
     this.setWindowTitle(file.name + (this.isClient.get() ? " (Read-only)" : ""));
     this.setWindowIcon(getMimeIcon(file.name))
