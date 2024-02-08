@@ -71,9 +71,9 @@ export class Runtime extends AppRuntime {
 
     const content = await file.data.text();
 
+    this.buffer.set("");
+    await sleep(10);
     this.buffer.set(content);
-    await sleep(0);
-    this.buffer.set(this.buffer.get());
 
     this.isClient.set(v.startsWith("@client"));
     this.File.set(file);

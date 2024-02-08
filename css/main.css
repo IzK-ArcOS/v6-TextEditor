@@ -44,7 +44,7 @@
   margin: 0;
   flex-grow: 1;
   font-size: var(--font-size);
-  overflow: scroll;
+  overflow: auto;
 }
 
 #TextEditor > div.body textarea.monospace {
