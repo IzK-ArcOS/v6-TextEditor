@@ -5,6 +5,7 @@
   import { Pane, Splitpanes } from "svelte-splitpanes";
   import MarkdownRenderer from "$lib/Components/MarkdownRenderer.svelte";
   import { MarkdownMimeIcon } from "$ts/images/mime";
+  import Markdown from "./Components/Markdown.svelte";
 
   export let runtime: Runtime;
 
@@ -40,9 +41,7 @@
     />
   </Pane>
   {#if $markdownPreview}
-    <Pane minSize={25}>
-      <MarkdownRenderer content={$buffer}></MarkdownRenderer>
-    </Pane>
+    <Markdown {runtime} />
   {/if}
 </Splitpanes>
 {#if $statusBar && $path && $File}

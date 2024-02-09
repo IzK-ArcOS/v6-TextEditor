@@ -10,7 +10,7 @@ import { getMimeIcon } from "$ts/server/fs/mime";
 import { FileProgress } from "$ts/server/fs/progress";
 import { pathToFriendlyName, pathToFriendlyPath } from "$ts/server/fs/util";
 import { GetSaveFilePath } from "$ts/stores/apps/file";
-import { sleep } from "$ts/util";
+import { CountInstances, sleep } from "$ts/util";
 import { Store } from "$ts/writable";
 import type { App, AppMutator } from "$types/app";
 import { ArcFile } from "$types/fs";
@@ -77,7 +77,7 @@ export class Runtime extends AppRuntime {
 
     this.isClient.set(v.startsWith("@client"));
     this.File.set(file);
-    this.setWindowTitle(file.name + (this.isClient.get() ? " (Read-only)" : ""));
+    this.setWindowTitle(`Editing ${file.name}` + (this.isClient.get() ? " (Read-only)" : ""));
     this.setWindowIcon(getMimeIcon(file.name))
 
     setDone(1);
@@ -148,10 +148,14 @@ export class Runtime extends AppRuntime {
     this.buffer.set(buffer.replace(text, replacer))
   }
 
-  public replaceAll(text: string, replacer: string) {
-    const buffer = this.buffer.get();
+  public async replaceAll(text: string, replacer: string) {
+    const occurences = CountInstances(this.buffer.get(), text) + 1;
 
-    this.buffer.set(buffer.replaceAll(text, replacer))
+    for (let i = 0; i < occurences; i++) {
+      this.buffer.set(this.buffer.get().replace(text, replacer));
+
+      await sleep(10);
+    }
   }
 
   private assignDispatchers() {

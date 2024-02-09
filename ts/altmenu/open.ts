@@ -30,7 +30,7 @@ export function OpenMenu(runtime: Runtime): ContextMenuItem {
           const path = runtime.path.get();
           const partial = await getPartialFile(path);
 
-          await openFileWithApp("MarkdownViewer", partial);
+          await openFileWithApp("MarkDownViewer", partial);
         }
       }
     ]
