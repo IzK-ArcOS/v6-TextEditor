@@ -23,11 +23,11 @@ export const SearchReplace: App = {
     minimized: false,
     headless: false,
     fullscreen: false,
-    resizable: false
+    resizable: false,
   },
   controls: {
     minimize: false,
     maximize: false,
-    close: false
-  }
-}
+    close: false,
+  },
+};

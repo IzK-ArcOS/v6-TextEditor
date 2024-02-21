@@ -1,8 +1,8 @@
 <script lang="ts">
   import MarkdownRenderer from "$lib/Components/MarkdownRenderer.svelte";
+  import { sleep } from "$ts/util";
   import { Pane } from "svelte-splitpanes";
   import { Runtime } from "../ts/runtime";
-  import { sleep } from "$ts/util";
 
   export let runtime: Runtime;
 

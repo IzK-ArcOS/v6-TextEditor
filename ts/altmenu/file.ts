@@ -11,7 +11,7 @@ export function FileMenu(runtime: Runtime): ContextMenuItem {
         caption: "Open...",
         action: () => runtime.openFile(),
         icon: "file_open",
-        accelerator: "Alt+O"
+        accelerator: "Alt+O",
       },
       SEP_ITEM,
       {
@@ -21,13 +21,13 @@ export function FileMenu(runtime: Runtime): ContextMenuItem {
           await runtime.save();
         },
         disabled: () => !runtime.path.get() || !runtime.buffer.get() || runtime.isClient.get(),
-        accelerator: "Alt+S"
+        accelerator: "Alt+S",
       },
       {
         caption: "Save As...",
         disabled: () => !runtime.buffer.get(),
         action: async () => await runtime.saveAs(),
-        accelerator: "Alt+Shift+S"
+        accelerator: "Alt+Shift+S",
       },
       SEP_ITEM,
       {
@@ -37,14 +37,16 @@ export function FileMenu(runtime: Runtime): ContextMenuItem {
           runtime.openFileLocation();
         },
         disabled: () => !runtime.path.get() || runtime.isClient.get(),
-        accelerator: "Alt+Shift+O"
+        accelerator: "Alt+Shift+O",
       },
       SEP_ITEM,
       {
         caption: "Exit",
-        action: () => { runtime.process.handler.kill(runtime.pid, true) },
-        accelerator: "Alt+Q"
-      }
-    ]
-  }
+        action: () => {
+          runtime.process.handler.kill(runtime.pid, true);
+        },
+        accelerator: "Alt+Q",
+      },
+    ],
+  };
 }

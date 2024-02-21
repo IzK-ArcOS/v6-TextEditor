@@ -36,6 +36,6 @@ export const TextEditor: App = {
     "alt+shift+o": "Open the file in File Manager",
     "alt+o": "Open a file",
     "alt+s": "Save the contents to the opened file",
-    "alt+shift+s": "Save the contents to a different file"
-  }
+    "alt+shift+s": "Save the contents to a different file",
+  },
 };

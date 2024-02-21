@@ -9,5 +9,5 @@ export const TextEditorAltMenu: (runtime: Runtime) => ContextMenuItem[] = (runti
   FileMenu(runtime),
   EditMenu(runtime),
   ViewMenu(runtime),
-  OpenMenu(runtime)
-]
+  OpenMenu(runtime),
+];

@@ -7,7 +7,6 @@ import { ContextMenuItem } from "$types/app";
 import { Runtime } from "../runtime";
 
 export function OpenMenu(runtime: Runtime): ContextMenuItem {
-
   return {
     caption: "Open",
     subItems: [
@@ -20,19 +19,20 @@ export function OpenMenu(runtime: Runtime): ContextMenuItem {
           const partial = await getPartialFile(path);
 
           OpenWith(partial, runtime.pid, true);
-        }
+        },
       },
       {
         caption: "Open as Markdown",
-        disabled: () => !runtime.path.get() || !runtime.path.get().endsWith(".md") || runtime.isClient.get(),
+        disabled: () =>
+          !runtime.path.get() || !runtime.path.get().endsWith(".md") || runtime.isClient.get(),
         image: MarkdownMimeIcon,
         async action() {
           const path = runtime.path.get();
           const partial = await getPartialFile(path);
 
           await openFileWithApp("MarkDownViewer", partial);
-        }
-      }
-    ]
-  }
+        },
+      },
+    ],
+  };
 }

@@ -9,5 +9,5 @@ export const TextEditorHandler: FileHandler = {
   description: "Open the file in the Text Editor",
   handler(file) {
     openFileWithApp("TextEditor", file);
-  }
-}
+  },
+};

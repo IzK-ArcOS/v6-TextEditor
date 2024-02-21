@@ -36,9 +36,7 @@
 <div class="bottom">
   <button class="close" on:click={close}>Close</button>
   <button disabled={!search || !replace} on:click={once}>Once</button>
-  <button disabled={!search || !replace} class="suggested" on:click={all}
-    >All</button
-  >
+  <button disabled={!search || !replace} class="suggested" on:click={all}>All</button>
 </div>
 
 <style scoped>

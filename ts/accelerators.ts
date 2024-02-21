@@ -9,35 +9,35 @@ export const TextEditorAccelerators: (runtime: Runtime) => AppKeyCombinations = 
       shift: true,
       action() {
         runtime.openFileLocation();
-      }
+      },
     },
     {
       key: "o",
       alt: true,
       action() {
         runtime.openFile();
-      }
+      },
     },
     {
       key: "s",
       alt: true,
       action() {
-        runtime.save()
-      }
+        runtime.save();
+      },
     },
     {
       key: "s",
       alt: true,
       shift: true,
       action() {
-        runtime.saveAs()
-      }
+        runtime.saveAs();
+      },
     },
     {
       key: "f3",
       action() {
         runtime.SearchReplaceDialog();
-      }
-    }
-  ]
-}
+      },
+    },
+  ];
+};

@@ -38,14 +38,14 @@ export class Runtime extends AppRuntime {
       if (!v) return;
 
       await this.readFile(v);
-    })
+    });
 
     if (process.args.length && typeof process.args[0] === "string") {
-      this.handleOpenFile(process.args[0])
+      this.handleOpenFile(process.args[0]);
     }
 
     this.loadAltMenu(...TextEditorAltMenu(this));
-    this.process.accelerator.store.push(...TextEditorAccelerators(this))
+    this.process.accelerator.store.push(...TextEditorAccelerators(this));
     this.assignDispatchers();
   }
 
@@ -78,7 +78,7 @@ export class Runtime extends AppRuntime {
     this.isClient.set(v.startsWith("@client"));
     this.File.set(file);
     this.setWindowTitle(`Editing ${file.name}` + (this.isClient.get() ? " (Read-only)" : ""));
-    this.setWindowIcon(getMimeIcon(file.name))
+    this.setWindowIcon(getMimeIcon(file.name));
 
     setDone(1);
   }
@@ -86,11 +86,11 @@ export class Runtime extends AppRuntime {
   public async save() {
     if (this.isClient.get()) return;
 
-    const content = this.buffer.get()
+    const content = this.buffer.get();
     const path = this.path.get();
     const file = this.File.get();
 
-    const { setDone } = await this.SaveProgress(path)
+    const { setDone } = await this.SaveProgress(path);
 
     const written = await writeFile(path, textToBlob(content, file ? file.mime : null));
 
@@ -103,7 +103,7 @@ export class Runtime extends AppRuntime {
     const path = await GetSaveFilePath(this.pid, {
       title: "Select location to save file",
       icon: SaveIcon,
-      startDir: getParentDirectory(this.path.get() || "./")
+      startDir: getParentDirectory(this.path.get() || "./"),
     });
 
     if (!path) return;
@@ -112,7 +112,7 @@ export class Runtime extends AppRuntime {
 
     await this.save();
 
-    this.openedFile.set(path)
+    this.openedFile.set(path);
   }
 
   public openFile() {
@@ -120,7 +120,7 @@ export class Runtime extends AppRuntime {
       {
         title: "Select any file to open",
         icon: TextEditorIcon,
-        startDir: getParentDirectory(this.path.get() || "./")
+        startDir: getParentDirectory(this.path.get() || "./"),
       },
     ]);
   }
@@ -128,12 +128,12 @@ export class Runtime extends AppRuntime {
   public openFileLocation() {
     const path = this.path.get();
 
-    if (!path || this.isClient.get()) return
+    if (!path || this.isClient.get()) return;
 
     const split = path.split("/");
     const filename = split[split.length - 1];
 
-    spawnApp("FileManager", 0, [path.replace(filename, "") || ".", path])
+    spawnApp("FileManager", 0, [path.replace(filename, "") || ".", path]);
   }
 
   public selectAll() {
@@ -145,7 +145,7 @@ export class Runtime extends AppRuntime {
   public replaceOnce(text: string, replacer: string) {
     const buffer = this.buffer.get();
 
-    this.buffer.set(buffer.replace(text, replacer))
+    this.buffer.set(buffer.replace(text, replacer));
   }
 
   public async replaceAll(text: string, replacer: string) {
@@ -168,7 +168,6 @@ export class Runtime extends AppRuntime {
     }
   }
 
-
   SearchReplaceDialog(args: any[] = []) {
     if (this.isClient.get()) return;
 
@@ -176,32 +175,40 @@ export class Runtime extends AppRuntime {
   }
 
   public async LoadProgress(v: string = this.path.get()) {
-    return await FileProgress({
-      caption: "Reading File",
-      subtitle: `Home/${pathToFriendlyPath(v)}`,
-      icon: TextEditorIcon,
-      max: 1,
-      done: 0,
-      type: "quantity",
-      waiting: false,
-      working: true,
-      errors: 0
-    }, this.pid, false)
+    return await FileProgress(
+      {
+        caption: "Reading File",
+        subtitle: `Home/${pathToFriendlyPath(v)}`,
+        icon: TextEditorIcon,
+        max: 1,
+        done: 0,
+        type: "quantity",
+        waiting: false,
+        working: true,
+        errors: 0,
+      },
+      this.pid,
+      false
+    );
   }
 
   public async SaveProgress(v: string = this.path.get()) {
     const filename = pathToFriendlyName(v);
 
-    return await FileProgress({
-      caption: `Saving ${filename}`,
-      subtitle: `Home/${pathToFriendlyPath(v)}`,
-      icon: SaveIcon,
-      max: 1,
-      done: 0,
-      type: "quantity",
-      waiting: false,
-      working: true,
-      errors: 0
-    }, this.pid, false)
+    return await FileProgress(
+      {
+        caption: `Saving ${filename}`,
+        subtitle: `Home/${pathToFriendlyPath(v)}`,
+        icon: SaveIcon,
+        max: 1,
+        done: 0,
+        type: "quantity",
+        waiting: false,
+        working: true,
+        errors: 0,
+      },
+      this.pid,
+      false
+    );
   }
 }

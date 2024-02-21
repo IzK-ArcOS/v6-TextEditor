@@ -22,8 +22,8 @@ export function EditMenu(runtime: Runtime): ContextMenuItem {
           runtime.SearchReplaceDialog();
         },
         accelerator: "F3",
-        disabled: () => runtime.isClient.get()
-      }
-    ]
-  }
+        disabled: () => runtime.isClient.get(),
+      },
+    ],
+  };
 }

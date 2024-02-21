@@ -7,6 +7,6 @@ export function TextEditorDispatchers(runtime: Runtime): Record<string, (...data
     },
     "replace-all": (data: [string, string]) => {
       runtime.replaceAll(data[0], data[1]);
-    }
-  }
+    },
+  };
 }

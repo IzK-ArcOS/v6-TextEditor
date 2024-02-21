@@ -1,11 +1,10 @@
 <script lang="ts">
+  import { MarkdownMimeIcon } from "$ts/images/mime";
   import { onMount } from "svelte";
+  import { Pane, Splitpanes } from "svelte-splitpanes";
+  import Markdown from "./Components/Markdown.svelte";
   import "./css/main.css";
   import { Runtime } from "./ts/runtime";
-  import { Pane, Splitpanes } from "svelte-splitpanes";
-  import MarkdownRenderer from "$lib/Components/MarkdownRenderer.svelte";
-  import { MarkdownMimeIcon } from "$ts/images/mime";
-  import Markdown from "./Components/Markdown.svelte";
 
   export let runtime: Runtime;
 
