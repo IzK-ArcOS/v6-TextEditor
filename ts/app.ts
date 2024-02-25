@@ -1,3 +1,4 @@
+import { SafeMode } from "$state/Desktop/ts/store";
 import { TextEditorIcon } from "$ts/images/apps";
 import { App } from "$types/app";
 import AppSvelte from "../App.svelte";
@@ -38,4 +39,5 @@ export const TextEditor: App = {
     "alt+s": "Save the contents to the opened file",
     "alt+shift+s": "Save the contents to a different file",
   },
+  loadCondition: () => !SafeMode.get(),
 };
