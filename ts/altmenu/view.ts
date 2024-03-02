@@ -34,6 +34,14 @@ export function ViewMenu(runtime: Runtime): ContextMenuItem {
       },
       SEP_ITEM,
       {
+        caption: "Status bar",
+        action: () => {
+          runtime.statusBar.set(!runtime.statusBar.get());
+        },
+        isActive: () => runtime.statusBar.get(),
+      },
+      SEP_ITEM,
+      {
         caption: "Show Markdown preview",
         action: () => {
           runtime.markdownPreview.set(!runtime.markdownPreview.get());
