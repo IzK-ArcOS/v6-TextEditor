@@ -5,6 +5,7 @@
   import Markdown from "./Components/Markdown.svelte";
   import "./css/main.css";
   import { Runtime } from "./ts/runtime";
+  import Statusbar from "./Components/Statusbar.svelte";
 
   export let runtime: Runtime;
 
@@ -43,11 +44,4 @@
     <Markdown {runtime} />
   {/if}
 </Splitpanes>
-{#if $statusBar && $path && $File}
-  <div class="statusbar">
-    <div class="segment file">
-      <img src={MarkdownMimeIcon} alt="" />
-      <span>{$File.name}</span>
-    </div>
-  </div>
-{/if}
+<Statusbar {runtime} />

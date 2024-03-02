@@ -10,18 +10,29 @@
 }
 
 #TextEditor > div.body div.statusbar {
-  background-color: var(--win-bg);
+  display: flex;
   height: 25px;
   border-top: var(--win-border);
-  padding: 0 7px;
-  line-height: 24px;
-  min-height: 25px;
+  align-items: center;
 }
 
 #TextEditor > div.body div.statusbar div.segment {
+  padding: 0 10px;
+  height: 25px;
+  line-height: 25px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#TextEditor > div.body div.statusbar div.segment.file {
   display: flex;
-  gap: 5px;
   align-items: center;
+  gap: 5px;
+}
+
+#TextEditor > div.body div.statusbar div.segment.right {
+  margin-left: auto;
 }
 
 #TextEditor > div.body div.statusbar div.segment + div.segment {
