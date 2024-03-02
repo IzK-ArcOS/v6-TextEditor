@@ -39,6 +39,7 @@ export function ViewMenu(runtime: Runtime): ContextMenuItem {
           runtime.statusBar.set(!runtime.statusBar.get());
         },
         isActive: () => runtime.statusBar.get(),
+        disabled: () => !runtime.File.get(),
       },
       SEP_ITEM,
       {
