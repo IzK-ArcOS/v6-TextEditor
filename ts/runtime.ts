@@ -84,7 +84,7 @@ export class Runtime extends AppRuntime {
   }
 
   public async save() {
-    if (this.isClient.get()) return;
+    if (this.isClient.get() || !this.path.get()) return;
 
     const content = this.buffer.get();
     const path = this.path.get();
