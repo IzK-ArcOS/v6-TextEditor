@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   border-top: var(--win-border);
+  overflow: hidden;
 }
 
 #TextEditor > div.body div.splitpanes {
