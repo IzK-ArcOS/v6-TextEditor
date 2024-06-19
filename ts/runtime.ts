@@ -178,7 +178,7 @@ export class Runtime extends AppRuntime {
     return await FileProgress(
       {
         caption: "Reading File",
-        subtitle: `Home/${pathToFriendlyPath(v)}`,
+        subtitle: `${pathToFriendlyPath(v)}`,
         icon: TextEditorIcon,
         max: 1,
         done: 0,
@@ -198,7 +198,7 @@ export class Runtime extends AppRuntime {
     return await FileProgress(
       {
         caption: `Saving ${filename}`,
-        subtitle: `Home/${pathToFriendlyPath(v)}`,
+        subtitle: `${pathToFriendlyPath(v)}`,
         icon: SaveIcon,
         max: 1,
         done: 0,
