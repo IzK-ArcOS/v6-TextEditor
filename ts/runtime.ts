@@ -10,6 +10,7 @@ import { getMimeIcon } from "$ts/server/fs/mime";
 import { FileProgress } from "$ts/server/fs/progress";
 import { pathToFriendlyName, pathToFriendlyPath } from "$ts/server/fs/util";
 import { GetSaveFilePath } from "$ts/stores/apps/file";
+import { focusedPid } from "$ts/stores/apps/focus";
 import { CountInstances, sleep } from "$ts/util";
 import { Store } from "$ts/writable";
 import type { App, AppMutator } from "$types/app";
@@ -75,12 +76,13 @@ export class Runtime extends AppRuntime {
     await sleep(10);
     this.buffer.set(content);
 
-    this.isClient.set(v.startsWith("@client"));
+    this.isClient.set(v.startsWith("@client") || file.virtual);
     this.File.set(file);
     this.setWindowTitle(`Editing ${file.name}` + (this.isClient.get() ? " (Read-only)" : ""));
     this.setWindowIcon(getMimeIcon(file.name));
 
     setDone(1);
+    focusedPid.set(this.pid);
   }
 
   public async save() {
