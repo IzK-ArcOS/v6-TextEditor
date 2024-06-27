@@ -98,7 +98,7 @@ export class Runtime extends AppRuntime {
 
     setDone(1);
 
-    return !!written;
+    return written == "success";
   }
 
   public async saveAs() {
